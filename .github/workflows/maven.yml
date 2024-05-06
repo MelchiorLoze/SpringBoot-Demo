@@ -17,6 +17,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      statuses: write
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      STATUSES_URL: ${{ github.event_name == 'pull_request' && github.event.pull_request.statuses_url || '' }}
 
     steps:
       - uses: actions/checkout@v4
@@ -28,3 +35,16 @@ jobs:
           cache: maven
       - name: Build with Maven
         run: mvn -B package --file pom.xml
+      - name: Add error status
+        run: |
+          if [ -n "${GITHUB_TOKEN}" ] && [ -n "${GITHUB_REPOSITORY}" ] && [ -n "${STATUSES_URL}" ]; then
+            curl -f -s --show-error -X POST \
+              --url "${STATUSES_URL}" \
+              -H 'accept: application/vnd.github.v3+json' \
+              -H "authorization: Bearer ${GITHUB_TOKEN}" \
+              -H 'content-type: application/json' \
+              -d "{ \"state\": \"error\",
+                \"target_url\": \"https://${GITHUB_DOMAIN:-github.com}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}\",
+                \"description\": \"following after context description\", \"context\": \"some message here\"
+                 }"
+          fi
