@@ -38,6 +38,10 @@ public class UserControllerTests {
         userRepository.deleteAll();
     }
 
+    /*
+     * GET
+     */
+
     @Test
     void shouldGetAllUsers() {
         List<User> expectedUsers = userRepository.saveAll(
@@ -67,6 +71,10 @@ public class UserControllerTests {
         assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
     }
 
+    /*
+     * POST
+     */
+
     @Test
     void shouldCreateUser() {
         User user = new User("John Doe", "john.doe@example.com");
@@ -82,6 +90,10 @@ public class UserControllerTests {
         assertTrue(actualUser.isPresent());
         assertEquals(createdUser, actualUser.get());
     }
+
+    /*
+     * PUT
+     */
 
     @Test
     void shouldUpdateUser() {
@@ -119,6 +131,10 @@ public class UserControllerTests {
         assertTrue(actualUser.isPresent());
         assertEquals(createdUser, actualUser.get());
     }
+
+    /*
+     * DELETE
+     */
 
     @Test
     void shouldDeleteUser() {
