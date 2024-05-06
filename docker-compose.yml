@@ -1,28 +1,27 @@
 services:
-    java_app:
-        container_name: java_app
-        image: MelchiorLoze/java_app:1.0.0
-        build: .
-        ports:
-            - 8080:8080
-        depends_on:
-            - java_db
-        environment:
-            DATABASE_URL: jdbc:postgresql://java_db:5432/postgres
-            DATABASE_USERNAME: postgres
-            DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+  java_app:
+    container_name: java_app
+    build: .
+    ports:
+      - 8080:8080
+    depends_on:
+      - java_db
+    environment:
+      DATABASE_URL: jdbc:postgresql://java_db:5432/postgres
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
 
-    java_db:
-        container_name: java_db
-        image: postgres:16
-        ports:
-            - 5432:5432
-        environment:
-            POSTGRES_DB: postgres
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-        volumes:
-            - pgdata:/var/lib/postgresql/data
+  java_db:
+    container_name: java_db
+    image: postgres:16
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
 
 volumes:
-    pgdata: {}
+  pgdata: {}
