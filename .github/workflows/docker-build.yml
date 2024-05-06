@@ -15,5 +15,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - uses: hoverkraft-tech/compose-action@v2.0.0
       - name: Build with Docker Compose
         run: docker compose build
