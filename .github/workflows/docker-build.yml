@@ -2,17 +2,18 @@ name: Docker Compose Build CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
-
   docker-build:
-
     runs-on: ubuntu-latest
 
+    env:
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+
     steps:
-    - uses: actions/checkout@v4
-    - name: Build with Docker Compose
-      run: docker compose build
+      - uses: actions/checkout@v4
+      - name: Build with Docker Compose
+        run: docker compose build
