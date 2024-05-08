@@ -36,4 +36,9 @@ class UserTests {
         assertThrows(TransactionSystemException.class, () -> userRepository.save(new User()));
         assertThrows(TransactionSystemException.class, () -> userRepository.save(new User("", "")));
     }
+
+    @Test
+    void shouldNotPersistUserWithInvalidEmail() {
+        assertThrows(TransactionSystemException.class, () -> userRepository.save(new User("John Doe", "john.doe")));
+    }
 }
