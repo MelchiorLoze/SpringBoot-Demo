@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,18 +16,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class User {
 
-    public User(String name, String email) {
-        this.name = name;
-        this.email = email;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotBlank
     @Column(name = "name")
     private String name;
 
+    @NotBlank
     @Column(name = "email")
     private String email;
+
+    public User(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
 }
