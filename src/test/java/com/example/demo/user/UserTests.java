@@ -35,6 +35,7 @@ class UserTests {
     void shouldNotPersistUserWithBlankProperties() {
         assertThrows(TransactionSystemException.class, () -> userRepository.save(new User()));
         assertThrows(TransactionSystemException.class, () -> userRepository.save(new User("", "")));
+        assertThrows(TransactionSystemException.class, () -> userRepository.save(new User(" ", " ")));
     }
 
     @Test
