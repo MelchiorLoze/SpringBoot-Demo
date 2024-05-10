@@ -29,7 +29,7 @@ public class Product {
     @Column(name = "name")
     private String name;
 
-    @OneToOne(mappedBy = "product", cascade = CascadeType.MERGE)
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private ListProduct listProduct;
 
