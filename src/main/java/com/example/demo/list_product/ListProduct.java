@@ -9,7 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -28,11 +28,12 @@ public class ListProduct {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @NotBlank
+    @NotNull
     @Column(name = "amount")
     private Integer amount;
 
     public ListProduct(Product product, Integer amount) {
+        amount = amount == null ? 1 : amount;
         this.product = product;
         this.amount = amount;
     }
