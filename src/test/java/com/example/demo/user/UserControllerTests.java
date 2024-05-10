@@ -66,6 +66,12 @@ class UserControllerTests {
     }
 
     @Test
+    void shouldValidateUserIdToGet() {
+        ResponseEntity<User> response = restTemplate.getForEntity("/users/{id}", User.class, "invalid");
+        assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
     void shouldNotFindInexistentUser() {
         ResponseEntity<User> response = restTemplate.getForEntity("/users/{id}", User.class, 1);
         assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
@@ -89,6 +95,12 @@ class UserControllerTests {
         Optional<User> actualUser = userRepository.findById(createdUser.getId());
         assertTrue(actualUser.isPresent());
         assertEquals(createdUser, actualUser.get());
+    }
+
+    @Test
+    void shouldValidateUserToCreate() {
+        ResponseEntity<User> response = restTemplate.postForEntity("/users", new User(), User.class);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     /*
@@ -132,6 +144,22 @@ class UserControllerTests {
         assertEquals(createdUser, actualUser.get());
     }
 
+    @Test
+    void shouldValidateUserIdToUpdate() {
+        ResponseEntity<User> response = restTemplate.exchange("/users/{id}", HttpMethod.PUT,
+                new HttpEntity<>(new User("John Doe", "john.doe@example.com")), User.class, "invalid");
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
+    void shouldValidateUserToUpdate() {
+        ResponseEntity<User> response = restTemplate.exchange("/users/{id}", HttpMethod.PUT, null, User.class, 1);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+        response = restTemplate.exchange("/users/{id}", HttpMethod.PUT, new HttpEntity<>(new User()), User.class, 1);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
     /*
      * DELETE
      */
@@ -146,6 +174,13 @@ class UserControllerTests {
 
         Optional<User> actualUser = userRepository.findById(user.getId());
         assertTrue(actualUser.isEmpty());
+    }
+
+    @Test
+    void shouldValidateUserIdToDelete() {
+        ResponseEntity<Void> response = restTemplate.exchange("/users/{id}", HttpMethod.DELETE, null, Void.class,
+                "invalid");
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
