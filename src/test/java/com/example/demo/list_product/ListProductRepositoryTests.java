@@ -1,6 +1,9 @@
 package com.example.demo.list_product;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +37,7 @@ class ListProductRepositoryTests {
     ListProductRepository listProductRepository;
 
     @Test
-    void shouldSaveListProduct() {
+    void shouldPersistListProduct() {
         Product product = new Product("Product 1");
         Integer amount = 2;
 
@@ -50,7 +53,7 @@ class ListProductRepositoryTests {
     }
 
     @Test
-    void shouldSaveListProductWithExistingProduct() {
+    void shouldPersistListProductWithExistingProduct() {
         Product product = entityManager.persist(new Product("Product 1"));
         Integer amount = 2;
 

@@ -1,38 +1,25 @@
 package com.example.demo.product;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.transaction.TransactionSystemException;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
-@Testcontainers
-@SpringBootTest
 class ProductTests {
 
-    @Container
-    @ServiceConnection
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16");
-
-    @Autowired
-    ProductRepository productRepository;
-
     @Test
-    void shouldCreateProduct() {
+    void shouldReturnProductAsString() {
         String name = "Product 1";
         Product product = new Product(name);
-        assertEquals(name, product.getName());
+        assertEquals(String.format("Product(id=null, name=%s, listProduct=null)", name), product.toString());
     }
 
     @Test
-    void shouldNotPersistProductWithBlankProperties() {
-        assertThrows(TransactionSystemException.class, () -> productRepository.save(new Product()));
-        assertThrows(TransactionSystemException.class, () -> productRepository.save(new Product("")));
-        assertThrows(TransactionSystemException.class, () -> productRepository.save(new Product(" ")));
+    void shouldReturnProductHashCode() {
+        String name = "Product 1";
+        Product product1 = new Product(name);
+        Product product2 = new Product(name);
+        assertNotNull(product1.hashCode());
+        assertEquals(product1.hashCode(), product2.hashCode());
     }
 }

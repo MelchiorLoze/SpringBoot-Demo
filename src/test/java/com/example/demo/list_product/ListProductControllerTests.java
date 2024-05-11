@@ -1,7 +1,7 @@
 package com.example.demo.list_product;
 
-import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,10 +60,12 @@ class ListProductControllerTests {
         ResponseEntity<ListProduct> response = restTemplate.postForEntity("/list-products", product, ListProduct.class);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
 
+        Integer amount = 1;
+
         ListProduct listProduct = response.getBody();
         assertNotNull(listProduct.getId());
         assertEquals(listProduct.getProduct().getId(), listProduct.getId());
-        assertEquals(1, listProduct.getAmount());
+        assertEquals(amount, listProduct.getAmount());
     }
 
     /*

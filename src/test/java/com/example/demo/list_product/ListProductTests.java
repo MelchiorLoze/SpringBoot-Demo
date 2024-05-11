@@ -1,6 +1,7 @@
 package com.example.demo.list_product;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 
@@ -27,6 +28,7 @@ public class ListProductTests {
         Integer amount = 1;
         ListProduct listProduct1 = new ListProduct(product, amount);
         ListProduct listProduct2 = new ListProduct(product, amount);
+        assertNotNull(listProduct1.hashCode());
         assertEquals(listProduct1.hashCode(), listProduct2.hashCode());
     }
 }
