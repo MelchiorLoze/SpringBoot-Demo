@@ -10,6 +10,7 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -29,12 +30,16 @@ public class ListProduct {
     private Product product;
 
     @NotNull
+    @PositiveOrZero
     @Column(name = "amount")
     private Integer amount;
 
     public ListProduct(Product product, Integer amount) {
-        amount = amount == null ? 1 : amount;
         this.product = product;
         this.amount = amount;
+    }
+
+    public ListProduct(Product product) {
+        this(product, 1);
     }
 }

@@ -12,14 +12,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.product.Product;
-import com.example.demo.product.ProductRepository;
 
 @RestController
 @RequestMapping("/list-products")
 public class ListProductController {
-
-    @Autowired
-    private ProductRepository productRepository;
 
     @Autowired
     private ListProductRepository listProductRepository;
@@ -32,7 +28,6 @@ public class ListProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ListProduct createListProduct(@RequestBody Product product) {
-        product = productRepository.save(product);
-        return listProductRepository.save(new ListProduct(product, 1));
+        return listProductRepository.save(new ListProduct(product));
     }
 }
