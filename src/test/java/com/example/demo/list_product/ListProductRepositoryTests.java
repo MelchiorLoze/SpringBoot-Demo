@@ -18,6 +18,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import com.example.demo.product.Product;
+import com.example.demo.user.User;
 
 import jakarta.validation.ConstraintViolationException;
 
@@ -39,13 +40,15 @@ class ListProductRepositoryTests {
     @Test
     void shouldPersistListProduct() {
         Product product = new Product("Product 1");
+        User user = entityManager.persist(new User("John Doe", "john.doe@example.com"));
         Integer amount = 2;
 
-        ListProduct listProduct = listProductRepository.saveAndFlush(new ListProduct(product, amount));
+        ListProduct listProduct = listProductRepository.saveAndFlush(new ListProduct(product, user, amount));
 
         assertNotNull(listProduct.getId());
         assertEquals(product.getId(), listProduct.getId());
         assertEquals(product, listProduct.getProduct());
+        assertEquals(user, listProduct.getUser());
         assertEquals(amount, listProduct.getAmount());
 
         ListProduct foundListProduct = listProductRepository.findById(listProduct.getId()).get();
@@ -55,15 +58,17 @@ class ListProductRepositoryTests {
     @Test
     void shouldPersistListProductWithExistingProduct() {
         Product product = entityManager.persist(new Product("Product 1"));
+        User user = entityManager.persist(new User("John Doe", "john.doe@example.com"));
         Integer amount = 2;
 
         assertNotNull(product.getId());
 
-        ListProduct listProduct = listProductRepository.saveAndFlush(new ListProduct(product, amount));
+        ListProduct listProduct = listProductRepository.saveAndFlush(new ListProduct(product, user, amount));
 
         assertNotNull(listProduct.getId());
         assertEquals(product.getId(), listProduct.getId());
         assertEquals(product, listProduct.getProduct());
+        assertEquals(user, listProduct.getUser());
         assertEquals(amount, listProduct.getAmount());
 
         ListProduct foundListProduct = listProductRepository.findById(listProduct.getId()).get();

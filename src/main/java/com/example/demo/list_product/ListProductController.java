@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.product.Product;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/list-products")
@@ -19,15 +19,4 @@ public class ListProductController {
 
     @Autowired
     private ListProductRepository listProductRepository;
-
-    @GetMapping
-    public List<ListProduct> getAllListProducts() {
-        return listProductRepository.findAll();
-    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ListProduct createListProduct(@RequestBody Product product) {
-        return listProductRepository.save(new ListProduct(product));
-    }
 }

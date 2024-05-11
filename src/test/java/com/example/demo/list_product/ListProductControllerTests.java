@@ -53,21 +53,6 @@ class ListProductControllerTests {
      * POST
      */
 
-    @Test
-    void shouldCreateListProduct() {
-        Product product = new Product("My Product");
-
-        ResponseEntity<ListProduct> response = restTemplate.postForEntity("/list-products", product, ListProduct.class);
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-
-        Integer amount = 1;
-
-        ListProduct listProduct = response.getBody();
-        assertNotNull(listProduct.getId());
-        assertEquals(listProduct.getProduct().getId(), listProduct.getId());
-        assertEquals(amount, listProduct.getAmount());
-    }
-
     /*
      * PUT
      */
