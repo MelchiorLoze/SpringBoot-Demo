@@ -45,8 +45,4 @@ public class ListProduct {
         this.user = user;
         this.amount = amount;
     }
-
-    public ListProduct(Product product, User user) {
-        this(product, user, 1);
-    }
 }
