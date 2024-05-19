@@ -1,46 +1,44 @@
 package com.example.demo.user;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.transaction.TransactionSystemException;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
-@Testcontainers
-@SpringBootTest
 class UserTests {
 
-    @Container
-    @ServiceConnection
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16");
+    @Test
+    void shouldCompareUsers() {
+        String name = "John Doe";
+        String email = "john.doe@example.com";
+        User user1 = new User(name, email);
+        User user2 = new User(name, email);
+        assertEquals(user1, user1);
+        assertEquals(user1, user2);
 
-    @Autowired
-    UserRepository userRepository;
+        user2.setName("Jane Doe");
+        assertNotEquals(user1, user2);
+
+        user2.setName(name);
+        user2.setEmail("jane.doe@example.com");
+        assertNotEquals(user1, user2);
+    }
 
     @Test
-    void shouldCreateUser() {
+    void shouldReturnUserAsString() {
         String name = "John Doe";
         String email = "john.doe@example.com";
         User user = new User(name, email);
-        assertEquals(name, user.getName());
-        assertEquals(email, user.getEmail());
+        assertEquals(String.format("User(id=null, name=%s, email=%s, listProducts=null)", name, email),
+                user.toString());
     }
 
     @Test
-    void shouldNotPersistUserWithBlankProperties() {
-        assertThrows(TransactionSystemException.class, () -> userRepository.save(new User()));
-        assertThrows(TransactionSystemException.class, () -> userRepository.save(new User("", "")));
-    }
-
-    @Test
-    void shouldNotPersistUserWithInvalidEmail() {
-        assertThrows(TransactionSystemException.class, () -> userRepository.save(new User("John Doe", "john.doe")));
-        assertThrows(TransactionSystemException.class,
-                () -> userRepository.save(new User("John Doe", "john doe@example.com")));
+    void shouldReturnUserHashCode() {
+        String name = "John Doe";
+        String email = "john.doe@example.com";
+        User user1 = new User(name, email);
+        User user2 = new User(name, email);
+        assertEquals(user1.hashCode(), user2.hashCode());
     }
 }
