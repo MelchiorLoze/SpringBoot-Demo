@@ -29,7 +29,8 @@ class UserTests {
         String name = "John Doe";
         String email = "john.doe@example.com";
         User user = new User(name, email);
-        assertEquals(String.format("User(id=null, name=%s, email=%s, listProducts=[])", name, email), user.toString());
+        assertEquals(String.format("User(id=null, name=%s, email=%s, listProducts=null)", name, email),
+                user.toString());
     }
 
     @Test
