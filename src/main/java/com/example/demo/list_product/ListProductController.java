@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.list_product.dto.ListProductCreateRequestDto;
+import com.example.demo.list_product.dto.ListProductCreateResponseDto;
 import com.example.demo.product.Product;
+import com.example.demo.product.ProductRepository;
 import com.example.demo.product.exeption.ProductNotFoundException;
 import com.example.demo.user.User;
 import com.example.demo.user.exception.UserForbiddenException;
@@ -25,6 +27,9 @@ public class ListProductController {
     private EntityManager entityManager;
 
     @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
     private ListProductRepository listProductRepository;
 
     @PostMapping
@@ -34,9 +39,15 @@ public class ListProductController {
         User user = entityManager.find(User.class, listProductCreateRequestDto.getUserId());
         if (user == null)
             throw new UserForbiddenException();
-        Product product = entityManager.find(Product.class, listProductCreateRequestDto.getProductId());
-        if (product == null)
-            throw new ProductNotFoundException();
+
+        Product product;
+        if (listProductCreateRequestDto.isCreateProduct()) {
+            product = productRepository.save(new Product(listProductCreateRequestDto.getProductName()));
+        } else {
+            product = entityManager.find(Product.class, listProductCreateRequestDto.getProductId());
+            if (product == null)
+                throw new ProductNotFoundException();
+        }
 
         ListProduct listProduct = new ListProduct(product, user, listProductCreateRequestDto.getAmount());
         listProductRepository.save(listProduct);
