@@ -16,7 +16,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import com.example.demo.list_product.dto.ListProductCreateRequestDto;
-import com.example.demo.list_product.dto.ListProductCreateResponseDto;
+import com.example.demo.list_product.dto.ListProductResponseDto;
 import com.example.demo.product.Product;
 import com.example.demo.product.ProductRepository;
 import com.example.demo.user.User;
@@ -63,12 +63,11 @@ class ListProductControllerTests {
         User user = userRepository.save(new User("John Doe", "john.doe@example.com"));
         Integer amount = 2;
 
-        ResponseEntity<ListProductCreateResponseDto> response = restTemplate.postForEntity("/list-products",
-                new ListProductCreateRequestDto(product.getId(), user.getId(), amount),
-                ListProductCreateResponseDto.class);
+        ResponseEntity<ListProductResponseDto> response = restTemplate.postForEntity("/list-products",
+                new ListProductCreateRequestDto(product.getId(), user.getId(), amount), ListProductResponseDto.class);
         assertEquals(response.getStatusCode(), HttpStatus.CREATED);
 
-        ListProductCreateResponseDto listProduct = response.getBody();
+        ListProductResponseDto listProduct = response.getBody();
         assertNotNull(listProduct);
         assertEquals(product.getId(), listProduct.getId());
         assertEquals(user.getId(), listProduct.getUserId());
@@ -82,11 +81,11 @@ class ListProductControllerTests {
         User user = userRepository.save(new User("John Doe", "john.doe@example.com"));
         Integer amount = 2;
 
-        ResponseEntity<ListProductCreateResponseDto> response = restTemplate.postForEntity("/list-products",
-                new ListProductCreateRequestDto(name, user.getId(), amount), ListProductCreateResponseDto.class);
+        ResponseEntity<ListProductResponseDto> response = restTemplate.postForEntity("/list-products",
+                new ListProductCreateRequestDto(name, user.getId(), amount), ListProductResponseDto.class);
         assertEquals(response.getStatusCode(), HttpStatus.CREATED);
 
-        ListProductCreateResponseDto listProduct = response.getBody();
+        ListProductResponseDto listProduct = response.getBody();
         assertNotNull(listProduct);
         assertNotNull(listProduct.getId());
         assertEquals(user.getId(), listProduct.getUserId());
@@ -98,30 +97,30 @@ class ListProductControllerTests {
     void shouldValidateBodyToCreateListProduct() {
         // amount must be positive or zero
         ListProductCreateRequestDto requestDto = new ListProductCreateRequestDto(1L, 1L, -1);
-        ResponseEntity<ListProductCreateResponseDto> response = restTemplate.postForEntity("/list-products", requestDto,
-                ListProductCreateResponseDto.class);
+        ResponseEntity<ListProductResponseDto> response = restTemplate.postForEntity("/list-products", requestDto,
+                ListProductResponseDto.class);
         assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
 
         // productId must be not null
         requestDto.setAmount(2);
         requestDto.setProductId(null);
-        ResponseEntity<ListProductCreateResponseDto> response2 = restTemplate.postForEntity("/list-products",
-                requestDto, ListProductCreateResponseDto.class);
+        ResponseEntity<ListProductResponseDto> response2 = restTemplate.postForEntity("/list-products", requestDto,
+                ListProductResponseDto.class);
         assertEquals(response2.getStatusCode(), HttpStatus.BAD_REQUEST);
 
         // userId must be not null
         requestDto.setProductId(1L);
         requestDto.setUserId(null);
-        ResponseEntity<ListProductCreateResponseDto> response3 = restTemplate.postForEntity("/list-products",
-                requestDto, ListProductCreateResponseDto.class);
+        ResponseEntity<ListProductResponseDto> response3 = restTemplate.postForEntity("/list-products", requestDto,
+                ListProductResponseDto.class);
         assertEquals(response3.getStatusCode(), HttpStatus.BAD_REQUEST);
 
         // productName must be not null
         requestDto.setUserId(1L);
         requestDto.setProductId(null);
         requestDto.setCreateProduct(true);
-        ResponseEntity<ListProductCreateResponseDto> response4 = restTemplate.postForEntity("/list-products",
-                requestDto, ListProductCreateResponseDto.class);
+        ResponseEntity<ListProductResponseDto> response4 = restTemplate.postForEntity("/list-products", requestDto,
+                ListProductResponseDto.class);
         assertEquals(response4.getStatusCode(), HttpStatus.BAD_REQUEST);
     }
 
@@ -131,9 +130,9 @@ class ListProductControllerTests {
         Long inexistantUserId = 1L;
         Integer amount = 2;
 
-        ResponseEntity<ListProductCreateResponseDto> response = restTemplate.postForEntity("/list-products",
+        ResponseEntity<ListProductResponseDto> response = restTemplate.postForEntity("/list-products",
                 new ListProductCreateRequestDto(product.getId(), inexistantUserId, amount),
-                ListProductCreateResponseDto.class);
+                ListProductResponseDto.class);
         assertEquals(response.getStatusCode(), HttpStatus.FORBIDDEN);
     }
 
@@ -143,9 +142,9 @@ class ListProductControllerTests {
         User user = userRepository.save(new User("John Doe", "john.doe@example.com"));
         Integer amount = 2;
 
-        ResponseEntity<ListProductCreateResponseDto> response = restTemplate.postForEntity("/list-products",
+        ResponseEntity<ListProductResponseDto> response = restTemplate.postForEntity("/list-products",
                 new ListProductCreateRequestDto(inexistantProductId, user.getId(), amount),
-                ListProductCreateResponseDto.class);
+                ListProductResponseDto.class);
         assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
     }
 
