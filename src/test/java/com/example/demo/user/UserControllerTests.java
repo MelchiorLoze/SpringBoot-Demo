@@ -129,20 +129,12 @@ class UserControllerTests {
     }
 
     @Test
-    void shouldCreateUserIfNotExists() {
+    void shouldNotUpdateInexistentUser() {
         User user = new User("John Doe", "john.doe@example.com");
 
         ResponseEntity<User> response = restTemplate.exchange("/users/{id}", HttpMethod.PUT, new HttpEntity<>(user),
                 User.class, 1);
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-
-        User createdUser = response.getBody();
-        assertEquals(user.getName(), createdUser.getName());
-        assertEquals(user.getEmail(), createdUser.getEmail());
-
-        Optional<User> actualUser = userRepository.findById(createdUser.getId());
-        assertTrue(actualUser.isPresent());
-        assertEquals(createdUser, actualUser.get());
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @Test
